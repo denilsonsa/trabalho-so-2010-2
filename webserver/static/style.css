@@ -1,0 +1,81 @@
+@charset "UTF-8";
+
+html, body {
+	margin: 0;
+	padding: 0;
+	/*background: #DDD;
+	color: black;*/
+}
+
+a img {
+	border: 0;
+}
+
+
+/* Top horizontal menu */
+div.horizontalmenu {
+    background: #06266F;
+}
+div.horizontalmenu > br {
+    clear: both;
+    height: 0;
+    font-size: 0;
+    display:block;
+}
+ul.horizontalmenu,
+ul.horizontalmenu li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+ul.horizontalmenu > li {
+    display: block;
+    float: left;
+}
+ul.horizontalmenu > li > a {
+    display: block;
+    padding: 0.5em 1em;
+    margin: 0;
+    background: #06266F;
+    color: white;
+    text-decoration: none;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+ul.horizontalmenu > li > a:hover,
+ul.horizontalmenu > li > a:active,
+ul.horizontalmenu > li > a:focus {
+    background: #1240AB;
+}
+
+
+/* The main content area */
+.content {
+    margin: 0;
+}
+
+
+/* "Listar sessões" table */
+table.sessoes {
+    border-collapse: collapse;
+}
+table.sessoes th,
+table.sessoes td {
+    padding: 0.75ex 1ex;
+    border: 1px gray solid;
+}
+table.sessoes .hora {
+    text-align: center;
+    white-space: nowrap;
+}
+table.sessoes .sala {
+    text-align: center;
+    white-space: nowrap;
+}
+table.sessoes .lugares {
+    text-align: right;
+    white-space: nowrap;
+}
+table.sessoes .filme {
+    text-align: left;
+}

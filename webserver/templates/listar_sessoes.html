@@ -1,0 +1,23 @@
+$def with (sessoes)
+
+<table class="sessoes">
+<thead>
+<tr>
+<th class="hora">Hora</th>
+<th class="sala">Sala</th>
+<th class="lugares">Lugares</th>
+<th class="filme">Filme</th>
+</tr>
+</thead>
+
+<tbody>
+$for s in sessoes:
+    <tr>
+    <td class="hora">$s.hora</td>
+    <td class="sala">$s.sala</td>
+    <td class="lugares">$s.lugares_livres/$s.lugares_total</td>
+    <td class="filme">$s.filme</td>
+    </tr>
+
+</tbody>
+</table>
