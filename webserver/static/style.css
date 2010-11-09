@@ -15,8 +15,15 @@ a img {
 /* Top horizontal menu */
 div.horizontalmenu {
     background: #06266F;
+	padding: 2px;
 }
-div.horizontalmenu > br {
+div.horizontalmenu .filmeffect {
+	margin: 0; /* This margin has become the padding of div.horizontalmenu */
+	padding: 2px;
+	border-top: 4px dotted white;
+	border-bottom: 4px dotted white;
+}
+div.horizontalmenu br {
     clear: both;
     height: 0;
     font-size: 0;
