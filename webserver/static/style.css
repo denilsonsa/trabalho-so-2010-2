@@ -5,6 +5,7 @@ html, body {
 	padding: 0;
 	background: white;
 	color: black;
+	font-family: sans-serif;
 }
 
 a img {
@@ -57,7 +58,6 @@ ul.horizontalmenu > li > a {
     color: white;
     text-decoration: none;
 	font-size: 12px;
-    font-family: sans-serif;
     font-weight: bold;
 }
 ul.horizontalmenu > li > a:hover,
@@ -69,9 +69,12 @@ ul.horizontalmenu > li > a:focus {
 
 /* The main content area */
 .content {
-    margin: 0;
+    margin-top: 0;
 	margin-bottom: 17px;  /* Enough for the .footer */
+	margin-left: auto;
+	margin-right: auto;
 
+	max-width: 750px;
 }
 .footer {
 	position: fixed;
@@ -93,10 +96,11 @@ ul.horizontalmenu > li > a:focus {
 /* "Listar sessões" table */
 table.sessoes {
     border-collapse: collapse;
+	margin: 0;
+	width: 100%;
 }
 table.sessoes th,
 table.sessoes td {
-    padding: 0.75ex 1ex;
     border: 1px gray solid;
 }
 table.sessoes .hora {
@@ -113,4 +117,46 @@ table.sessoes .lugares {
 }
 table.sessoes .filme {
     text-align: left;
+}
+table.sessoes th,
+table.sessoes td > a {
+    padding: 0.75ex 1ex;
+}
+table.sessoes td > a {
+	display: block;
+	text-decoration: none;
+	color: #06266F;
+}
+table.sessoes tr:hover td {
+	background: #D6D6D6;
+}
+
+div.sessao {
+	border: 1px gray solid;
+}
+div.sessao h1.filme {
+	margin: 0;
+	padding: 2px 8px;
+	font: inherit;
+	font-size: 2em;
+	font-variant: small-caps;
+
+	background: #D6D6D6;
+	color: black;
+}
+div.sessao .sala {
+	float: left;
+}
+div.sessao .hora {
+	/* float: right; */
+	text-align: right;
+}
+div.sessao .hora,
+div.sessao .sala {
+	font-size: 1.5em;
+	padding: 2px 8px;
+}
+div.sessao .sinopse {
+	clear: both;
+	margin: 1em 8px;
 }
