@@ -3,14 +3,24 @@
 html, body {
 	margin: 0;
 	padding: 0;
-	/*background: #DDD;
-	color: black;*/
+	background: white;
+	color: black;
 }
 
 a img {
 	border: 0;
 }
 
+/* Color list:
+
+#1240AB - Main
+#2A4480 - darker
+#06266F - even darker
+#4671D5 - lighter
+#6C8CD5 - even lighter
+
+Thanks to http://www.colorschemedesigner.com/
+*/
 
 /* Top horizontal menu */
 div.horizontalmenu {
@@ -46,6 +56,7 @@ ul.horizontalmenu > li > a {
     background: #06266F;
     color: white;
     text-decoration: none;
+	font-size: 12px;
     font-family: sans-serif;
     font-weight: bold;
 }
@@ -59,6 +70,23 @@ ul.horizontalmenu > li > a:focus {
 /* The main content area */
 .content {
     margin: 0;
+	margin-bottom: 17px;  /* Enough for the .footer */
+
+}
+.footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	padding: 2px 4px;
+	font-size: 13px;
+	line-height: 1em;
+
+	text-align: right;
+	font-style: italic;
+	background: #06266F;
+	color: white;
 }
 
 
