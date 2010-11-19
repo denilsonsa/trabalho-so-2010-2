@@ -10,6 +10,7 @@ urls = (
     r'/', 'homepage',
     r'/sessoes', 'sessoes',
     r'/sessao/(\d+)', 'sessao',
+    r'/comet', 'comet',
 )
 # "/static/" directory is automatically served by web.py
 
@@ -31,6 +32,19 @@ class sessao:
     def GET(self, id):
         s = Sessao(randomize=True)
         return render.exibir_sessao(s)
+
+
+class comet:
+    def GET(self):
+        # Based on:
+        # http://yoan.dosimple.ch/blog/2007/11/30/
+        # http://groups.google.com/group/webpy/browse_thread/thread/a12348390931b426
+        # http://en.wikipedia.org/wiki/Comet_(programming)
+        yield "This is a padding text...\n" * 60
+        import time
+        for i in range(100):
+            time.sleep(1)
+            yield "%d\n" % (i,)
 
 
 # Debugging is automatically enabled in the built-in webserver
