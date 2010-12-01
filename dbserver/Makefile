@@ -1,8 +1,9 @@
 OBJECTS = \
-	ListenerThread.class \
-	WorkerThread.class
+	br/ufrj/dcc/so/cinema/FileIO.class \
+	br/ufrj/dcc/so/cinema/WorkerThread.class \
+	br/ufrj/dcc/so/cinema/ListenerThread.class
 
-CLASSPATH = -cp br/ufrj/dcc/so/cinema:google-gson-1.6/gson-1.6.jar:guava-r07/guava-r07.jar
+CLASSPATH = -cp .:google-gson-1.6/gson-1.6.jar:guava-r07/guava-r07.jar
 
 #Basic rules
 .PHONY: all clean run
@@ -10,12 +11,10 @@ all: $(OBJECTS)
 
 clean:
 	for a in $(OBJECTS) ; do \
-		rm -f $$a ; \
+		rm -fv $$a ; \
 	done
 
-#run: $(OBJECTS)
-#	java ListenerThread $(CLASSPATH)
-run:
+run: $(OBJECTS)
 	java br.ufrj.dcc.so.cinema.ListenerThread $(CLASSPATH)
 
 #The variables:

@@ -7,9 +7,6 @@ import java.io.IOException;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
-//import com.google.gson.Gson;
-//import com.google.gson.reflect.TypeToken;
-
 public class FileIO {
 	
 	public final String PREFIX = "data/";
@@ -36,19 +33,4 @@ public class FileIO {
 	public String read() throws IOException {
 		return Files.toString(new File(filename), Charsets.UTF_8);
 	}
-/*
-	public void write(Entidade[] list) throws IOException {
-		Gson gson = new Gson();
-		FileWriter file_writer = new FileWriter(filename);
-		file_writer.write(gson.toJson(list));
-		file_writer.close();
-	}
-	
-	public Entidade[] read() throws FileNotFoundException {
-		Gson gson = new Gson();
-		FileReader file_reader = new FileReader(filename);
-		Type return_type = new TypeToken<Entidade[]>() {}.getType();
-		return gson.fromJson(file_reader, return_type);
-	}
-*/
 }

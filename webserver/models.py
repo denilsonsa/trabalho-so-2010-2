@@ -27,7 +27,7 @@ class Sessao(object):
     def __repr__(self):
         return 'Sessao({0})'.format(', '.join(
             repr(getattr(self, x)) for x in
-            ('hora', 'sala', 'lugares_total', 'lugares_livres', 'filme', )
+            ('id', 'hora', 'sala', 'lugares_total', 'lugares_livres', 'filme', )
         ))
 
     def __cmp__(self, other):
