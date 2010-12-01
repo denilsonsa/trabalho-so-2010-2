@@ -1,3 +1,4 @@
+package br.ufrj.dcc.so.cinema;
 
 public class Hello {
 	

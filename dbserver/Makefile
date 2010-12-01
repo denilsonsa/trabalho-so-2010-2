@@ -2,6 +2,8 @@ OBJECTS = \
 	ListenerThread.class \
 	WorkerThread.class
 
+CLASSPATH = -cp br/ufrj/dcc/so/cinema:google-gson-1.6/gson-1.6.jar:guava-r07/guava-r07.jar
+
 #Basic rules
 .PHONY: all clean run
 all: $(OBJECTS)
@@ -11,8 +13,10 @@ clean:
 		rm -f $$a ; \
 	done
 
-run: $(OBJECTS)
-	java ListenerThread
+#run: $(OBJECTS)
+#	java ListenerThread $(CLASSPATH)
+run:
+	java br.ufrj.dcc.so.cinema.ListenerThread $(CLASSPATH)
 
 #The variables:
 # $@ - The name of the target of the rule.
@@ -22,4 +26,4 @@ run: $(OBJECTS)
 
 #Pattern-rules
 %.class: %.java
-	javac $<
+	javac $< $(CLASSPATH)

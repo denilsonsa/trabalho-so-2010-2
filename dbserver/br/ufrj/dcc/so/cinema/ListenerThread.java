@@ -1,3 +1,5 @@
+package br.ufrj.dcc.so.cinema;
+
 import java.net.ServerSocket;
 import java.net.Socket;
 
