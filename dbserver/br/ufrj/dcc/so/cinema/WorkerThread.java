@@ -34,13 +34,8 @@ public class WorkerThread extends Thread {
 		try {
 			System.out.print("Running this new thread...\n");
 			output.println("Hello, welcome to this new thread.");
-			while(true) {
-				String s;
-				s = input.readLine();
-				if( s == null )
-					break;
-				parse_command(s);
-			}
+			process_input();
+			socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -48,29 +43,79 @@ public class WorkerThread extends Thread {
 		System.out.print("Bye bye, thread...\n");
 	}
 	
-	public void parse_command(String cmdline) throws IOException {
+
+	// Vai lendo a entrada e repassa para parse_command()
+	public void process_input() throws IOException {
+		while(true) {
+			String s;
+			s = input.readLine();
+			if( s == null )
+				break;
+			if( !parse_command(s) )
+				break;
+		}
+	}
+	
+	// Processa um único comando.
+	// Em caso de "sync", chama recusivamente o process_input() dentro de um bloco synchronized().
+	// Returns true if should continue parsing, false to stop parsing.
+	public Boolean parse_command(String cmdline) throws IOException {
+		if( cmdline == null )
+			return false;
+
 		String[] tokens = cmdline.split("\\s");
 		//for( String i : tokens) {
 		//	System.out.println("--"+i+"--");
 		//}
-		if( tokens.length == 2 )
+		if( tokens.length == 1 )
+		{
+			String action = tokens[0];
+
+			if( action.equals("TRANSACTION") )
+			{
+				// TODO: Implement this... Criar um semáforo.
+			}
+			else if( action.equals("RELEASE") )
+			{
+				return false;
+			}
+			else if( action.equals("###") )
+			{
+				// This should not happen
+				return false;
+			}
+		}
+		else if( tokens.length == 2 )
 		{
 			String action = tokens[0];
 			String target = tokens[1];
 			if( action.equals("GET") )
 			{
-				FileIO f = new FileIO(target);
+				FileIO f = ListenerThread.fileIOFactory.get_FileIO(target);
 				output.write(f.read());
 				output.write("\n###\n");
 				output.flush();
+				return true;
 			}
 			else if( action.equals("PUT") )
 			{
-				FileIO f = new FileIO(target);
+				FileIO f = ListenerThread.fileIOFactory.get_FileIO(target);
 				String s = read_until_end();
 				f.write(s);
+				return true;
+			}
+			else if( action.equals("SYNC") )
+			{
+				FileIO f = ListenerThread.fileIOFactory.get_FileIO(target);
+				synchronized (f) {
+					process_input();
+				}
+				return true;
 			}
 		}
+
+		// This is an error... Not sure what to do, so let's just go on.
+		return true;
 	}
 	
 	// Reads until receiving a null, or receiving "###"

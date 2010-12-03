@@ -4,9 +4,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ListenerThread {
+	
+	public static FileIOFactory fileIOFactory;
 
 	public static void main(String args[]) {
 		try {
+			fileIOFactory = new FileIOFactory();
 			ServerSocket server_socket = null;
 
 			int porta = 1234;
