@@ -17,8 +17,4 @@ syntax: glob
 *.pyo
 *.class
 dbserver/*.zip
-dbserver/google-gson-1.6/gson-1.6-javadoc.jar
-dbserver/google-gson-1.6/gson-1.6-sources.jar
-dbserver/guava-r07/javadoc
-dbserver/guava-r07/guava-r07-gwt.jar
-dbserver/guava-r07/guava-src-r07.zip
+dbserver/guava-r07/

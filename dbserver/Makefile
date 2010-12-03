@@ -4,7 +4,7 @@ OBJECTS = \
 	br/ufrj/dcc/so/cinema/WorkerThread.class \
 	br/ufrj/dcc/so/cinema/ListenerThread.class
 
-CLASSPATH = -cp .:google-gson-1.6/gson-1.6.jar:guava-r07/guava-r07.jar
+CLASSPATH = -cp .:guava-r07.jar
 
 #Basic rules
 .PHONY: all clean run
