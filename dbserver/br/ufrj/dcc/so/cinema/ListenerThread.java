@@ -2,14 +2,17 @@ package br.ufrj.dcc.so.cinema;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Semaphore;
 
 public class ListenerThread {
 	
 	public static FileIOFactory fileIOFactory;
+	public static Semaphore IOLock;
 
 	public static void main(String args[]) {
 		try {
 			fileIOFactory = new FileIOFactory();
+			IOLock = new Semaphore(1, true);
 			ServerSocket server_socket = null;
 
 			int porta = 1234;
