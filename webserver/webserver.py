@@ -3,13 +3,14 @@
 # vi:ts=4 sw=4 et
 
 import web
-from models import Sessao
+from models import Sessao, AssentosDaSessao, Assento
 
 
 urls = (
     r'/', 'homepage',
     r'/sessoes', 'sessoes',
     r'/sessao/(\d+)', 'sessao',
+    r'/comprar/(\d+)/(\d+),(\d+)', 'comprar_assento',
     r'/comet', 'comet',
 )
 # "/static/" directory is automatically served by web.py
@@ -31,7 +32,20 @@ class sessoes:
 class sessao:
     def GET(self, id):
         s = Sessao(randomize=True)
-        return render.exibir_sessao(s)
+        s.id = id
+        a = AssentosDaSessao()
+        return render.exibir_sessao(s, a)
+
+
+class comprar_assento:
+    def GET(self, sessao_id, assento_x, assento_y):
+        s = Sessao(randomize=True)
+        s.id = id
+        a = Assento(assento_x, assento_y)
+        return render.comprar_assento(s, a)
+
+    def POST(self, sessao_id, assento_x, assento_y):
+        raise web.seeother('/sessao/'+str(sessao_id))
 
 
 class comet:

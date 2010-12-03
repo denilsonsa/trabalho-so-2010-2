@@ -38,3 +38,31 @@ class Sessao(object):
         return 0
 
 
+class AssentosDaSessao(object):
+    def __init__(self, linhas=8, colunas=8):
+        self.linhas = linhas
+        self.colunas = colunas
+        #self.assentos = [[]]
+
+        self.generate_assentos()
+
+    def generate_assentos(self):
+        self.assentos = [
+            [Assento(j,i) for j in range(self.colunas) ]
+            for i in range(self.linhas)
+        ]
+
+class Assento(object):
+    LIVRE = 0
+    OCUPADO = 1
+
+    def __init__(self, x, y, estado=None):
+        if estado is None:
+            estado = Assento.LIVRE
+
+        self.x = x
+        self.y = y
+        self.estado = estado
+
+    def __repr__(self):
+        return 'Assento({0})'.format(self.estado)

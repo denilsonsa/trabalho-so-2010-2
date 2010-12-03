@@ -1,4 +1,4 @@
-$def with (sessao)
+$def with (sessao, assentos)
 
 <div class="sessao">
 
@@ -7,7 +7,28 @@ $def with (sessao)
 <div class="sala">Sala $sessao.sala</div>
 <div class="hora">$sessao.hora</div>
 
-<div class="sinopse">Futuramente haverá uma sinopse aqui.</div>
+<div class="sinopse">
+<!--lorem-->
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, faucibus orci
+luctus et ultrices posuere cubilia Curae; Curabitur consequat leo et dui.
+Aenean ligula mi, dignissim ut, imperdiet tristique, interdum a, dolor.</p>
 
+<p>Vestibulum elit nibh, rhoncus non, euismod sit amet, pretium eu, enim. Nunc
+commodo ultricies dui. Cras gravida rutrum massa. Donec accumsan mattis turpis.
+Quisque sem. Quisque elementum sapien iaculis augue. In dui sem, congue sit
+amet, feugiat quis, lobortis at, eros.</p>
+<!--/lorem-->
 </div>
 
+<table class="mapa_de_assentos">
+$for linha in assentos.assentos:
+	<tr>
+	$for coluna in linha:
+		$if coluna.estado == coluna.LIVRE:
+			<td class="assento_estado_${coluna.estado}"><a href="/comprar/$sessao.id/$coluna.x,$coluna.y"></a></td>
+		$elif coluna.estado == coluna.OCUPADO:
+			<td class="assento_estado_${coluna.estado}"></td>
+	</tr>
+</table>
+
+</div>
