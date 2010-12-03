@@ -30,13 +30,13 @@ public class WorkerThread extends Thread {
 		// chamar os métodos .println() ou .format() (mas não faz flush depois
 		// do .print())
 		output = new PrintWriter(raw_output, true);
-		System.out.print("New thread created\n");
+		System.out.println("New thread created");
 	}
 
 	public void run() {
 		try {
-			System.out.print("Running this new thread...\n");
-			output.println("Hello, welcome to this new thread.");
+			System.out.println("Running this new thread...");
+			//output.println("Hello, welcome to this new thread.");
 			read_and_process_input();
 			socket.close();
 		} catch (IOException e) {
@@ -46,7 +46,7 @@ public class WorkerThread extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.print("Bye bye, thread...\n");
+		System.out.println("Bye bye, thread...");
 	}
 	
 
@@ -71,6 +71,7 @@ public class WorkerThread extends Thread {
 		if( cmdline == null )
 			return;
 
+		System.out.println("Received command '" + cmdline + "'.");
 		String[] tokens = cmdline.split("\\s");
 		if( tokens.length == 1 )
 		{
@@ -81,6 +82,7 @@ public class WorkerThread extends Thread {
 				if( !has_lock )
 				{
 					ListenerThread.IOLock.acquire();
+					System.out.println("Lock has been acquired.");
 					has_lock = true;
 				}
 			}
@@ -89,6 +91,7 @@ public class WorkerThread extends Thread {
 				if( has_lock )
 				{
 					ListenerThread.IOLock.release();
+					System.out.println("Lock has been released.");
 					has_lock = false;
 				}
 			}
@@ -127,7 +130,8 @@ public class WorkerThread extends Thread {
 			s = input.readLine();
 			if( s == null )
 				throw new SocketException("End of socket while reading data...");
-			if( s.substring(0, 3).equals("###") )
+			if( s.equals("###") )
+			//if( s.substring(0, 3).equals("###") )
 				break;
 			sb.append(s);
 		}

@@ -1,5 +1,6 @@
 OBJECTS = \
 	br/ufrj/dcc/so/cinema/FileIO.class \
+	br/ufrj/dcc/so/cinema/FileIOFactory.class \
 	br/ufrj/dcc/so/cinema/WorkerThread.class \
 	br/ufrj/dcc/so/cinema/ListenerThread.class
 
