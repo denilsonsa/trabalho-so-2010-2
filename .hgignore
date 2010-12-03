@@ -16,5 +16,3 @@ syntax: glob
 *.pyc
 *.pyo
 *.class
-dbserver/*.zip
-dbserver/guava-r07/

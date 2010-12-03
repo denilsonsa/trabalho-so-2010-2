@@ -4,8 +4,6 @@ OBJECTS = \
 	br/ufrj/dcc/so/cinema/WorkerThread.class \
 	br/ufrj/dcc/so/cinema/ListenerThread.class
 
-CLASSPATH = -cp .:guava-r07.jar
-
 #Basic rules
 .PHONY: all clean run
 all: $(OBJECTS)
@@ -16,7 +14,7 @@ clean:
 	done
 
 run: $(OBJECTS)
-	java br.ufrj.dcc.so.cinema.ListenerThread $(CLASSPATH)
+	java br.ufrj.dcc.so.cinema.ListenerThread
 
 #The variables:
 # $@ - The name of the target of the rule.
@@ -26,4 +24,4 @@ run: $(OBJECTS)
 
 #Pattern-rules
 %.class: %.java
-	javac $< $(CLASSPATH)
+	javac $<
