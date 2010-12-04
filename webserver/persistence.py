@@ -2,8 +2,9 @@
 # vi:ts=4 sw=4 et
 
 from itertools import takewhile
-import socket
+from base64 import b64decode, b64encode
 import cPickle as pickle
+import socket
 
 
 PERSISTENCE_SERVER_ADDRESS = ("127.0.0.1", 1234)
@@ -13,11 +14,12 @@ class Connection(object):
     def __init__(self):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect(PERSISTENCE_SERVER_ADDRESS)
-        self.file_like = self.sock.makefile("rb")
+        self.read_file_like = self.sock.makefile("rb")
+        self.write_file_like = self.sock.makefile("wb")
 
     def close(self):
         "Fecha a conexão"
-        self.file_like.close()
+        self.read_file_like.close()
         self.sock.close()
 
     def acquire(self):
@@ -35,7 +37,7 @@ class Connection(object):
         return "".join(
             takewhile(
                 lambda line: line.strip() != "###",
-                self.file_like
+                self.read_file_like
             )
         ).rstrip("\n")
 
@@ -45,7 +47,7 @@ class Connection(object):
         """
         s = self.get(name)
         if s:
-            return pickle.loads(s)
+            return pickle.loads(b64decode(s))
         else:
             return None
 
@@ -58,5 +60,5 @@ class Connection(object):
     def save(self, name, obj):
         "Salva um objeto no dbserver (usando pickle)."
         dump = pickle.dumps(obj)
-        self.put(name, dump)
+        self.put(name, b64encode(dump))
 
