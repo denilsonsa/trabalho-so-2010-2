@@ -5,9 +5,9 @@ $def with (sessao, assento, cod_compra)
 <div class="ingresso">
 
 <div class="filme">$sessao.filme</div>
-<div class="sala">Sala $sessao.sala</div>
+<div class="sala">$sessao.sala.nome</div>
 <div class="hora">$sessao.hora</div>
-<div class="cadeira">Cadeira ${assento.y}-${assento.x}</div>
+<div class="cadeira">Cadeira ${assento.id}</div>
 
 $if cod_compra:
 	<div class="barcode doublesize">

@@ -187,23 +187,26 @@ div.sessao .sinopse {
 }
 table.mapa_de_assentos {
 	border-collapse: separate;
+	border-spacing: 4px;
 	empty-cells: show;
 	table-layout: fixed;
 	margin: 1em auto;
 }
 table.mapa_de_assentos td {
 	border: 2px outset gray;
-	width: 2em;
-	height: 2em;
+	width: 1.5em;
+	height: 1.5em;
 	padding: 0;
 	text-align: center;
 	vertical-align: middle;
 }
 table.mapa_de_assentos td.assento_estado_0 {
 	background: #12AB40;
+	border-color: #12AB40;
 }
 table.mapa_de_assentos td.assento_estado_1 {
 	background: #AB4012;
+	border-color: #AB4012;
 }
 table.mapa_de_assentos td > a {
 	display: block;

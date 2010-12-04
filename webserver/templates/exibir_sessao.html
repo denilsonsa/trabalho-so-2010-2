@@ -1,10 +1,10 @@
-$def with (sessao, assentos)
+$def with (sessao)
 
 <div class="sessao">
 
 <h1 class="filme">$sessao.filme</h1>
 
-<div class="sala">Sala $sessao.sala</div>
+<div class="sala">$sessao.sala.nome</div>
 <div class="hora">$sessao.hora</div>
 
 <div class="sinopse">
@@ -14,11 +14,11 @@ $for linha in sessao.sinopse.splitlines():
 </div>
 
 <table class="mapa_de_assentos">
-$for linha in assentos.assentos:
+$for linha in sessao.assentos:
 	<tr>
 	$for coluna in linha:
 		$if coluna.estado == coluna.LIVRE:
-			<td class="assento_estado_${coluna.estado}"><a href="/comprar/$sessao.id/$coluna.x,$coluna.y"></a></td>
+			<td class="assento_estado_${coluna.estado}"><a href="/comprar/$sessao.id/$coluna.id"></a></td>
 		$elif coluna.estado == coluna.OCUPADO:
 			<td class="assento_estado_${coluna.estado}"></td>
 	</tr>

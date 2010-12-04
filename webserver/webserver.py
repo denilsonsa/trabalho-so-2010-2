@@ -4,11 +4,10 @@
 
 import random
 import web
+from itertools import chain
 
 from persistence import Connection
 from models import Sala, Sessao, Assento
-
-import cPickle as pickle
 
 
 urls = (
@@ -21,7 +20,7 @@ urls = (
 
     r'/sessoes/?', 'listar_sessoes',
     r'/sessao/(\d+)/?', 'sessao',
-    r'/comprar/(\d+)/([a-zA-Z0-9]+),([a-zA-Z0-9]+)/?', 'comprar_assento',
+    r'/comprar/(\d+)/([-_a-zA-Z0-9]+)/?', 'comprar_assento',
 
     r'/comet', 'comet', # this is just a small experiment
 )
@@ -188,7 +187,6 @@ class cadastrar_sessao:
             s.id = next_id
 
             sessoes.append(s)
-            pickle.dump(sessoes, open('/tmp/TMP_SESSOES', 'wb'))
             c.save("sessoes", sessoes)
             c.release()
             raise web.seeother('/sessoes')
@@ -199,29 +197,73 @@ class cadastrar_sessao:
 
 class sessao:
     def GET(self, id):
-        # TODO: FIXME!
-        s = Sessao(randomize=True)
-        s.id = id
-        a = AssentosDaSessao()
-        return render.exibir_sessao(s, a)
+        id = int(id)
+        sessoes = Sessao.load_sessoes()
+        filtradas = filter(lambda x: x.id == id, sessoes)
+        if len(filtradas) == 0:
+            raise web.seeother('/sessoes')
+
+        return render.exibir_sessao(filtradas[0])
 
 
 class comprar_assento:
-    def GET(self, sessao_id, assento_x, assento_y):
-        # TODO: FIXME!
-        s = Sessao(randomize=True)
-        s.id = id
-        a = Assento(assento_x, assento_y)
-        return render.comprar_assento(s, a, None)
+    def validar_sessao_e_assento(self, sessao_id, assento_id, sessoes):
+        """Verifica se a Sessão e o Assento realmente existem, e retorna
+        uma tupla com (Sessao, Assento).
+        
+        Em caso de algum dado inválido, redireciona para a listagem de
+        sessões.
+        """
 
-    def POST(self, sessao_id, assento_x, assento_y):
-        # TODO: FIXME!
-        s = Sessao(randomize=True)
-        s.id = id
-        a = Assento(assento_x, assento_y)
+        sessoes_filtradas = filter(lambda x: x.id == sessao_id, sessoes)
+        if len(sessoes_filtradas) == 0:
+            raise web.seeother('/sessoes')
+
+        sessao = sessoes_filtradas[0]
+        assentos_filtrados = filter(
+            lambda x: x.id == assento_id,
+            chain(*sessao.assentos)
+        )
+
+        if len(assentos_filtrados) == 0:
+            raise web.seeother('/sessoes')
+        assento = assentos_filtrados[0]
+
+        return sessao, assento
+
+    def GET(self, sessao_id, assento_id):
+        sessao_id = int(sessao_id)
+        sessoes = Sessao.load_sessoes()
+        sessao, assento = self.validar_sessao_e_assento(sessao_id, assento_id, sessoes)
+
+        return render.comprar_assento(sessao, assento, None)
+
+    def POST(self, sessao_id, assento_id):
+        sessao_id = int(sessao_id)
+        c = Connection()
+        c.acquire()
+
+        sessoes = Sessao.load_sessoes(c)
+        try:
+            sessao, assento = self.validar_sessao_e_assento(sessao_id, assento_id, sessoes)
+
+            if assento.estado != assento.LIVRE:
+                # É... Alguém já comprou este assento.
+                # Paciência, e melhor sorte da próxima vez.
+                return render.comprar_assento(sessao, assento, None)
+
+            assento.estado = assento.OCUPADO
+            c.save("sessoes", sessoes)
+        finally:
+            c.release()
+            c.close()
+
+        # Atualmente é gerado um código de compra (que é exibido como um
+        # código de barras), porém esse código não fica salvo em lugar
+        # nenhum.
         cod_compra = u"".join(str(random.randint(0,9)) for i in range(20))
-        return render.comprar_assento(s, a, cod_compra)
-        #raise web.seeother('/sessao/'+str(sessao_id))
+
+        return render.comprar_assento(sessao, assento, cod_compra)
 
 
 class comet:
