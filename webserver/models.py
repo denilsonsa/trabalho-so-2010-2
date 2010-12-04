@@ -44,66 +44,95 @@ class Sala(object):
 
 
 class Sessao(object):
-    def __init__(self, id=None, hora=None, sala=None, lugares_total=None, lugares_livres=None, filme=None, sinopse=None, randomize=False):
+    def __init__(self, id=None, hora=None, sala=None, filme=None, sinopse=None):
         self.id = id
         self.hora = hora
         self.sala = sala
-        self.lugares_total = lugares_total
-        self.lugares_livres = lugares_livres
         self.filme = filme
         self.sinopse = sinopse
+        self.assentos = [[]]
 
-        if randomize:
-            self.randomize()
+    def generate_assentos(self):
+        self.assentos = [
+            [
+                Assento(
+                    id="{0}-{1}".format(string.uppercase[i], j+1),
+                    x=j,
+                    y=i
+                )
+                for j in range(self.sala.largura)
+            ]
+            for i in range(self.sala.altura)
+        ]
 
-    def randomize(self):
-        self.id = random.randint(1, 999999)
-        self.hora = '%02d:%02d' % (random.randint(12, 23), random.randint(0, 59))
-        self.sala = random.randint(1, 6)
-        self.lugares_total = 60
-        self.lugares_livres = random.randint(0, self.lugares_total)
-        self.filme = u'A volta dos que não foram II'
-        self.sinopse = u'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mollis velit. Sed vitae metus. Morbi posuere mi id odio. Donec elit sem, tempor at, pharetra eu, sodales sit amet, elit.'
+    def get_assentos_count(self):
+        """Retorna uma tupla com a quantidade de assentos (livres, total)"""
+        total1 = sum( len(l) for l in self.assentos )
+        total2 = self.sala.altura * self.sala.largura
+        assert total1 == total2
+
+        livres = sum(
+            len([a for a in l if a.estado == a.LIVRE])
+            for l in self.assentos
+        )
+
+        return livres, total1
+
+    def get_assentos_count_string(self):
+        """Retorna 'livres/total', como string"""
+        return '{0}/{1}'.format(*self.get_assentos_count())
 
     def __repr__(self):
         return 'Sessao({0})'.format(', '.join(
             repr(getattr(self, x)) for x in
-            ('id', 'hora', 'sala', 'lugares_total', 'lugares_livres', 'filme', )
+            ('id', 'hora', 'sala', 'filme',)
         ))
 
     def __cmp__(self, other):
-        for attr in ('hora', 'sala', 'filme', 'lugares_total', 'lugares_livres', 'id',):
+        for attr in ('hora', 'sala', 'filme', 'id',):
             c = cmp(getattr(self, attr), getattr(other, attr))
             if c:
                 return c
         return 0
 
+    @staticmethod
+    def load_sessoes(connection=None):
+        "Retorna uma lista de objetos Sessao(), carregada a partir do dbserver."
+        if connection is None:
+            c = Connection()
+        else:
+            c = connection
 
-class AssentosDaSessao(object):
-    def __init__(self, linhas=8, colunas=8):
-        self.linhas = linhas
-        self.colunas = colunas
-        #self.assentos = [[]]
+        sessoes = c.load("sessoes") or []
 
-        self.generate_assentos()
+        if connection is None:
+            c.close()
 
-    def generate_assentos(self):
-        self.assentos = [
-            [Assento(j+1, string.uppercase[i]) for j in range(self.colunas) ]
-            for i in range(self.linhas)
-        ]
+        return sessoes
+
 
 class Assento(object):
     LIVRE = 0
     OCUPADO = 1
 
-    def __init__(self, x, y, estado=None):
+    def __init__(self, id=None, x=None, y=None, estado=None):
         if estado is None:
             estado = Assento.LIVRE
 
+        self.id = id
         self.x = x
         self.y = y
         self.estado = estado
 
     def __repr__(self):
-        return 'Assento({0})'.format(self.estado)
+        return 'Assento({0})'.format(', '.join(
+            repr(getattr(self, x)) for x in
+            ('id', 'x', 'y', 'estado',)
+        ))
+
+    def __cmp__(self, other):
+        for attr in ('id', 'y', 'x',):
+            c = cmp(getattr(self, attr), getattr(other, attr))
+            if c:
+                return c
+        return 0

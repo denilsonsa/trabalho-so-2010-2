@@ -16,8 +16,8 @@ $def with (sessoes)
 $for s in sessoes:
     <tr>
     <td class="hora"   ><a href="/sessao/$s.id">$s.hora</a></td>
-    <td class="sala"   ><a href="/sessao/$s.id">$s.sala</a></td>
-    <td class="lugares"><a href="/sessao/$s.id">$s.lugares_livres/$s.lugares_total</a></td>
+    <td class="sala"   ><a href="/sessao/$s.id">$s.sala.nome</a></td>
+    <td class="lugares"><a href="/sessao/$s.id">${s.get_assentos_count_string()}</a></td>
     <td class="filme"  ><a href="/sessao/$s.id">$s.filme</a></td>
     </tr>
 

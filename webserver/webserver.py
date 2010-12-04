@@ -6,7 +6,9 @@ import random
 import web
 
 from persistence import Connection
-from models import Sala, Sessao, AssentosDaSessao, Assento
+from models import Sala, Sessao, Assento
+
+import cPickle as pickle
 
 
 urls = (
@@ -98,13 +100,12 @@ class cadastrar_sala:
             salas = Sala.load_salas(c)
 
             if salas:
-                next_id = max(x.id for x in salas)
+                next_id = max(x.id for x in salas) + 1
             else:
                 next_id = 1
-
             s.id = next_id
-            salas.append(s)
 
+            salas.append(s)
             c.save("salas", salas)
             c.release()
             c.close()
@@ -115,12 +116,15 @@ class cadastrar_sala:
 
 class listar_sessoes:
     def GET(self):
-        return render.listar_sessoes(sorted(Sessao(randomize=True) for i in range(10)))
+        sessoes = Sessao.load_sessoes()
+        sessoes.sort()
+        return render.listar_sessoes(sessoes)
 
 
 class cadastrar_sessao:
-    def get_form(self, connection=None):
-        salas = Sala.load_salas(connection)
+    def get_form(self, salas=None):
+        if salas is None:
+            salas = Sala.load_salas()
         form = web.form.Form(  # {{{
             web.form.Textbox(
                 'filme',
@@ -129,13 +133,19 @@ class cadastrar_sessao:
             ),
             web.form.Dropdown(
                 'sala',
-                [(s.id, s.nome) for s in salas],
+                [
+                    (s.id, '{0} ({1}x{2})'.format(
+                        s.nome, s.largura, s.altura)
+                    )
+                    for s in salas
+                ],
                 web.form.notnull,
                 description="Sala:"
             ),
             web.form.Textbox(
                 'hora',
                 web.form.notnull,
+                web.form.regexp('^\d+:\d+$', 'Hora inválida'),
                 description="Hora:"
             ),
             web.form.Textarea(
@@ -155,15 +165,41 @@ class cadastrar_sessao:
         return render.cadastrar(u'Cadastrar Sessão', f)
 
     def POST(self):
-        f = self.get_form()
+        c = Connection()
+        c.acquire()
+        salas = Sala.load_salas(c)
+        f = self.get_form(salas)
         if f.validates():
-            return "Good!"
+            s = Sessao(
+                hora=f['hora'].value,
+                filme=f['filme'].value,
+                sinopse=f['sinopse'].value
+            )
+
+            sala_id = int(f['sala'].value)
+            s.sala = filter(lambda x: x.id == sala_id, salas)[0]
+            s.generate_assentos()
+
+            sessoes = Sessao.load_sessoes(c)
+            if sessoes:
+                next_id = max(x.id for x in sessoes) + 1
+            else:
+                next_id = 1
+            s.id = next_id
+
+            sessoes.append(s)
+            pickle.dump(sessoes, open('/tmp/TMP_SESSOES', 'wb'))
+            c.save("sessoes", sessoes)
+            c.release()
+            raise web.seeother('/sessoes')
         else:
+            c.release()
             return render.cadastrar(u'Cadastrar Sessão', f)
 
 
 class sessao:
     def GET(self, id):
+        # TODO: FIXME!
         s = Sessao(randomize=True)
         s.id = id
         a = AssentosDaSessao()
@@ -172,12 +208,14 @@ class sessao:
 
 class comprar_assento:
     def GET(self, sessao_id, assento_x, assento_y):
+        # TODO: FIXME!
         s = Sessao(randomize=True)
         s.id = id
         a = Assento(assento_x, assento_y)
         return render.comprar_assento(s, a, None)
 
     def POST(self, sessao_id, assento_x, assento_y):
+        # TODO: FIXME!
         s = Sessao(randomize=True)
         s.id = id
         a = Assento(assento_x, assento_y)
