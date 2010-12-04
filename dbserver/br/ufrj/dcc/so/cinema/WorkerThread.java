@@ -62,7 +62,11 @@ public class WorkerThread extends Thread {
 			}
 		} finally {
 			if( has_lock )
+			{
 				ListenerThread.IOLock.release();
+				System.out.println("Lock has been released.");
+				has_lock = false;
+			}
 		}
 	}
 	
@@ -107,8 +111,12 @@ public class WorkerThread extends Thread {
 			String target = tokens[1];
 			if( action.equals("GET") )
 			{
-				FileIO f = ListenerThread.fileIOFactory.get_FileIO(target);
-				output.write(f.read());
+				try {
+					FileIO f = ListenerThread.fileIOFactory.get_FileIO(target);
+					output.write(f.read());
+				} catch (IOException e) {
+					// Do nothing
+				}
 				output.write("\n###\n");
 				output.flush();
 			}
@@ -133,7 +141,7 @@ public class WorkerThread extends Thread {
 			if( s.equals("###") )
 			//if( s.substring(0, 3).equals("###") )
 				break;
-			sb.append(s);
+			sb.append(s + '\n');
 		}
 		return sb.toString();
 	}

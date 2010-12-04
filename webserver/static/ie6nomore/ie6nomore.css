@@ -1,0 +1,58 @@
+/* The following code has been adapted from http://www.ie6nomore.com/code-samples.html */
+
+.ie6nomore {
+	border: 1px solid #F7941D;
+	background: #FEEFDA;
+	text-align: center;
+	clear: both;
+	height: 75px;
+	position: relative;
+}
+
+.ie6nomore img {
+	border: 0;
+}
+
+.ie6nomore_close {
+	position: absolute;
+	right: 3px;
+	top: 3px;
+	font-family:  "Courier New", "Courier", monospace;
+	font-weight: bold;
+}
+
+.ie6nomore_inner {
+	width: 640px;
+	margin: 0 auto;
+	text-align: left;
+	padding: 0;
+	overflow: hidden;
+	color: black;
+}
+
+.ie6nomore_warning {
+	width: 75px;
+	float: left;
+}
+
+.ie6nomore_message {
+	width: 275px;
+	float: left;
+	font-family: "Arial", sans-serif;
+}
+
+.ie6nomore_message_bold {
+	font-size: 14px;
+	font-weight: bold;
+	margin-top: 6px; /* 12px*/
+}
+.ie6nomore_message_normal {
+	font-size: 12px;
+	margin-top: 6px;
+	line-height: 12px;
+}
+
+.ie6nomore_icon {
+	width: 71px; /* 75px */
+	float: left;
+}

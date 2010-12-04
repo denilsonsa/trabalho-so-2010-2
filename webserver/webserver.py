@@ -4,17 +4,24 @@
 
 import random
 import web
-from models import Sessao, AssentosDaSessao, Assento
+
+from persistence import Connection
+from models import Sala, Sessao, AssentosDaSessao, Assento
 
 
 urls = (
     r'/', 'homepage',
+
     r'/admin', 'admin',
-    r'/sessoes/?', 'sessoes',
+    r'/listar_salas/?', 'listar_salas',
+    r'/cadastrar_sala/?', 'cadastrar_sala',
     r'/cadastrar_sessao/?', 'cadastrar_sessao',
+
+    r'/sessoes/?', 'listar_sessoes',
     r'/sessao/(\d+)/?', 'sessao',
     r'/comprar/(\d+)/([a-zA-Z0-9]+),([a-zA-Z0-9]+)/?', 'comprar_assento',
-    r'/comet', 'comet',
+
+    r'/comet', 'comet', # this is just a small experiment
 )
 # "/static/" directory is automatically served by web.py
 
@@ -31,47 +38,122 @@ class admin:
         return render.admin()
 
 
-class sessoes:
+class listar_salas:
+    def GET(self):
+        c = Connection()
+        salas = c.load("salas") or []
+        c.close()
+        salas.sort()
+        return render.listar_salas(salas)
+
+
+class cadastrar_sala:
+    def get_form(self):
+        form = web.form.Form(  # {{{
+            web.form.Textbox(
+                'nome',
+                web.form.notnull,
+                value="Sala 1",
+                description="Nome:"
+            ),
+            web.form.Textbox(
+                'largura',
+                web.form.notnull,
+                web.form.regexp('^\d+$', 'Precisa ser um valor numérico'),
+                value="8",
+                description="Largura:"
+            ),
+            web.form.Textbox(
+                'altura',
+                web.form.notnull,
+                web.form.regexp('^\d+$', 'Precisa ser um valor numérico'),
+                value="8",
+                description="Altura:"
+            ),
+            web.form.Button(
+                'Cadastrar',
+                type='submit'
+            )
+        )  # }}}
+        return form()
+
+    def GET(self):
+        f = self.get_form()
+        return render.cadastrar(u'Cadastrar Sala', f)
+
+    def POST(self):
+        f = self.get_form()
+        if f.validates():
+            s = Sala(
+                nome=f["nome"].value,
+                largura=int(f["largura"].value),
+                altura=int(f["altura"].value)
+            )
+
+            c = Connection()
+            c.acquire()
+
+            salas = c.load("salas") or []
+            if salas:
+                next_id = max(x.id for x in salas)
+            else:
+                next_id = 1
+            s.id = next_id
+            salas.append(s)
+
+            c.save("salas", salas)
+            c.release()
+            c.close()
+            raise web.seeother('/listar_salas')
+        else:
+            return render.cadastrar(u'Cadastrar Sala', f)
+
+
+class listar_sessoes:
     def GET(self):
         return render.listar_sessoes(sorted(Sessao(randomize=True) for i in range(10)))
 
 
 class cadastrar_sessao:
-    form = web.form.Form(
-        web.form.Textbox(
-            'filme',
-            web.form.notnull,
-            description="Filme:"
-        ),
-        web.form.Textbox(
-            'sala',
-            web.form.notnull,
-            description="Sala:"
-        ),
-        web.form.Textbox(
-            'hora',
-            web.form.notnull,
-            description="Hora:"
-        ),
-        web.form.Textarea(
-            'sinopse',
-            description="Sinopse:"
-        ),
-        web.form.Button(u'Cadastrar'),
-    )
+    def get_form(self):
+        form = web.form.Form(  # {{{
+            web.form.Textbox(
+                'filme',
+                web.form.notnull,
+                description="Filme:"
+            ),
+            web.form.Textbox(
+                'sala',
+                web.form.notnull,
+                description="Sala:"
+            ),
+            web.form.Textbox(
+                'hora',
+                web.form.notnull,
+                description="Hora:"
+            ),
+            web.form.Textarea(
+                'sinopse',
+                description="Sinopse:",
+                rows='3'
+            ),
+            web.form.Button(
+                'Cadastrar',
+                type='submit'
+            )
+        )  # }}}
+        return form()
 
     def GET(self):
-        s = Sessao()
-        f = self.form()
-        return render.cadastrar_sessao(s, f)
+        f = self.get_form()
+        return render.cadastrar(u'Cadastrar Sessão', f)
 
     def POST(self):
-        s = Sessao()
-        f = self.form()
+        f = self.get_form()
         if f.validates():
             return "Good!"
         else:
-            return render.cadastrar_sessao(s, f)
+            return render.cadastrar(u'Cadastrar Sessão', f)
 
 
 class sessao:

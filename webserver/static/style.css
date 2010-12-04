@@ -71,7 +71,6 @@ ul.horizontalmenu > li > a:focus {
     background: #1240AB;
 }
 
-
 /* The main content area */
 .content {
     margin-top: 0;
@@ -99,6 +98,17 @@ ul.horizontalmenu > li > a:focus {
 	color: white;
 }
 
+@media print {
+	div.horizontalmenu,
+	.footer {
+		display: none;
+	}
+	.content {
+		margin-bottom: 0;
+	}
+}
+
+
 h1 {
 	margin: 0;
 	padding: 2px 8px;
@@ -116,16 +126,30 @@ div.index p {
 	margin-right: 8px;
 }
 
-/* "Listar sessões" table */
-table.sessoes {
+/* list_data table (Listar Salas, Listar Sessões) */
+table.list_data {
     border-collapse: collapse;
 	margin: 1em 0;
 	width: 100%;
 }
-table.sessoes th,
-table.sessoes td {
+table.list_data th,
+table.list_data td {
     border: 1px gray solid;
 }
+table.list_data th,
+table.list_data td > a {
+    padding: 0.75ex 1ex;
+}
+table.list_data td > a {
+	display: block;
+	text-decoration: none;
+	color: #06266F;
+}
+table.list_data tr:hover td {
+	background: #D6D6D6;
+}
+
+/* "Listar sessões" table */
 table.sessoes .hora {
     text-align: center;
     white-space: nowrap;
@@ -140,18 +164,6 @@ table.sessoes .lugares {
 }
 table.sessoes .filme {
     text-align: left;
-}
-table.sessoes th,
-table.sessoes td > a {
-    padding: 0.75ex 1ex;
-}
-table.sessoes td > a {
-	display: block;
-	text-decoration: none;
-	color: #06266F;
-}
-table.sessoes tr:hover td {
-	background: #D6D6D6;
 }
 
 /* Sessão */
@@ -188,10 +200,10 @@ table.mapa_de_assentos td {
 	vertical-align: middle;
 }
 table.mapa_de_assentos td.assento_estado_0 {
-	background: green;
+	background: #12AB40;
 }
 table.mapa_de_assentos td.assento_estado_1 {
-	background: red;
+	background: #AB4012;
 }
 table.mapa_de_assentos td > a {
 	display: block;
@@ -247,15 +259,15 @@ div.ingresso .barcode {
 	margin: 1em auto;
 }
 
-/* Cadastrar sessao */
-div.cadastrar_sessao table {
+/* Cadastros */
+div.cadastro table {
 	border-collapse: collapse;
 	border: 0;
 	table-layout: fixed;
 	width: 400px;
 	margin: 1em auto;
 }
-div.cadastrar_sessao table th {
+div.cadastro table th {
 	border: 0;
 	font: inherit;
 	font-weight: bold;
@@ -263,30 +275,31 @@ div.cadastrar_sessao table th {
 	vertical-align: top;
 	width: 100px;
 }
-div.cadastrar_sessao table td {
+div.cadastro table td {
 	border: 0;
 	width: 300px;
 	text-align: left;
 	vertical-align: top;
 }
-div.cadastrar_sessao table td input[type=text] {
+div.cadastro table td input[type=text] {
 	width: 100%;
 }
-div.cadastrar_sessao table td textarea {
+div.cadastro table td textarea {
 	width: 100%;
+	font-family: sans-serif;
 }
-div.cadastrar_sessao table td strong.wrong {
+div.cadastro table td strong.wrong {
 	display: block;
 	margin-bottom: 1ex;
 	font: inherit;
 	color: red;
 }
-div.cadastrar_sessao table tr:last-child td {
+div.cadastro table tr:last-child td {
 	padding-top: 1em;
 	text-align: right;
 }
-div.cadastrar_sessao table td button,
-div.cadastrar_sessao table td input[type=submit] {
+div.cadastro table td button[type=submit],
+div.cadastro table td input[type=submit] {
 	background: #12AB40;
 	color: white;
 }

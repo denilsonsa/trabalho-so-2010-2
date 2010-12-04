@@ -5,6 +5,27 @@ import string
 import random
 
 
+class Sala(object):
+    def __init__(self, id=None, nome=None, largura=None, altura=None):
+        self.id = id
+        self.nome = nome
+        self.largura = largura
+        self.altura = altura
+
+    def __repr__(self):
+        return 'Sala({0})'.format(', '.join(
+            repr(getattr(self, x)) for x in
+            ('id', 'nome', 'largura', 'altura',)
+        ))
+
+    def __cmp__(self, other):
+        for attr in ('nome', 'id',):
+            c = cmp(getattr(self, attr), getattr(other, attr))
+            if c:
+                return c
+        return 0
+
+
 class Sessao(object):
     def __init__(self, id=None, hora=None, sala=None, lugares_total=None, lugares_livres=None, filme=None, sinopse=None, randomize=False):
         self.id = id
@@ -34,7 +55,7 @@ class Sessao(object):
         ))
 
     def __cmp__(self, other):
-        for attr in ('hora', 'sala', 'filme', 'lugares_total', 'lugares_livres', ):
+        for attr in ('hora', 'sala', 'filme', 'lugares_total', 'lugares_livres', 'id',):
             c = cmp(getattr(self, attr), getattr(other, attr))
             if c:
                 return c

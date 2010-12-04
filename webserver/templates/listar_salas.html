@@ -1,0 +1,21 @@
+$def with (salas)
+
+<h1>Salas disponíveis</h1>
+
+<table class="list_data sessoes">
+<thead>
+<tr>
+<th class="nome">Nome</th>
+<th class="dimensoes">Dimensões</th>
+</tr>
+</thead>
+
+<tbody>
+$for s in salas:
+    <tr>
+    <td class="nome"     ><a href="">$s.nome</a></td>
+    <td class="dimensoes"><a href="">${s.largura}x${s.altura}</a></td>
+    </tr>
+
+</tbody>
+</table>

@@ -40,8 +40,15 @@ class Connection(object):
         ).rstrip("\n")
 
     def load(self, name):
-        "Retorna o objeto salvo no dbserver (usando pickle)."
-        return pickle.loads(self.get(name))
+        """Retorna o objeto salvo no dbserver (usando pickle).
+        Retorna None caso a resposta seja vazia (objeto não encontrado).
+        """
+        s = self.get(name)
+        print repr(s)  # DEBUG
+        if s:
+            return pickle.loads(s)
+        else:
+            return None
 
     def put(self, name, data):
         "Salva uma string no dbserver."
@@ -51,5 +58,7 @@ class Connection(object):
 
     def save(self, name, obj):
         "Salva um objeto no dbserver (usando pickle)."
-        self.put(name, pickle.dumps(obj))
+        dump = pickle.dumps(obj)
+        print repr(dump)  # DEBUG
+        self.put(name, dump)
 
