@@ -40,14 +40,16 @@ class admin:
 
 class listar_salas:
     def GET(self):
-        c = Connection()
-        salas = c.load("salas") or []
-        c.close()
+        salas = Sala.load_salas()
         salas.sort()
         return render.listar_salas(salas)
 
 
 class cadastrar_sala:
+    # Aviso: Não é feita checagem por nomes duplicados.
+    # Aviso: Não é possível editar ou apagar salas (porque não foi
+    # implementada a interface para o usuário)
+
     def get_form(self):
         form = web.form.Form(  # {{{
             web.form.Textbox(
@@ -93,11 +95,13 @@ class cadastrar_sala:
             c = Connection()
             c.acquire()
 
-            salas = c.load("salas") or []
+            salas = Sala.load_salas(c)
+
             if salas:
                 next_id = max(x.id for x in salas)
             else:
                 next_id = 1
+
             s.id = next_id
             salas.append(s)
 
@@ -115,15 +119,17 @@ class listar_sessoes:
 
 
 class cadastrar_sessao:
-    def get_form(self):
+    def get_form(self, connection=None):
+        salas = Sala.load_salas(connection)
         form = web.form.Form(  # {{{
             web.form.Textbox(
                 'filme',
                 web.form.notnull,
                 description="Filme:"
             ),
-            web.form.Textbox(
+            web.form.Dropdown(
                 'sala',
+                [(s.id, s.nome) for s in salas],
                 web.form.notnull,
                 description="Sala:"
             ),

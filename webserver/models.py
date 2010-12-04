@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 # vi:ts=4 sw=4 et
 
-import string
 import random
+import string
+
+from persistence import Connection
 
 
 class Sala(object):
@@ -24,6 +26,21 @@ class Sala(object):
             if c:
                 return c
         return 0
+
+    @staticmethod
+    def load_salas(connection=None):
+        "Retorna uma lista de objetos Sala(), carregada a partir do dbserver."
+        if connection is None:
+            c = Connection()
+        else:
+            c = connection
+
+        salas = c.load("salas") or []
+
+        if connection is None:
+            c.close()
+
+        return salas
 
 
 class Sessao(object):

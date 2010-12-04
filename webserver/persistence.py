@@ -44,7 +44,6 @@ class Connection(object):
         Retorna None caso a resposta seja vazia (objeto não encontrado).
         """
         s = self.get(name)
-        print repr(s)  # DEBUG
         if s:
             return pickle.loads(s)
         else:
@@ -59,6 +58,5 @@ class Connection(object):
     def save(self, name, obj):
         "Salva um objeto no dbserver (usando pickle)."
         dump = pickle.dumps(obj)
-        print repr(dump)  # DEBUG
         self.put(name, dump)
 
