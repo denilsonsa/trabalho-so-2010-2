@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 # vi:ts=4 sw=4 et
 
+import string
 import random
 
 
 class Sessao(object):
-    def __init__(self, id=None, hora=None, sala=None, lugares_total=None, lugares_livres=None, filme=None, randomize=False):
+    def __init__(self, id=None, hora=None, sala=None, lugares_total=None, lugares_livres=None, filme=None, sinopse=None, randomize=False):
         self.id = id
         self.hora = hora
         self.sala = sala
         self.lugares_total = lugares_total
         self.lugares_livres = lugares_livres
         self.filme = filme
+        self.sinopse = sinopse
 
         if randomize:
             self.randomize()
@@ -23,6 +25,7 @@ class Sessao(object):
         self.lugares_total = 60
         self.lugares_livres = random.randint(0, self.lugares_total)
         self.filme = u'A volta dos que não foram II'
+        self.sinopse = u'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Mollis velit. Sed vitae metus. Morbi posuere mi id odio. Donec elit sem, tempor at, pharetra eu, sodales sit amet, elit.'
 
     def __repr__(self):
         return 'Sessao({0})'.format(', '.join(
@@ -48,7 +51,7 @@ class AssentosDaSessao(object):
 
     def generate_assentos(self):
         self.assentos = [
-            [Assento(j,i) for j in range(self.colunas) ]
+            [Assento(j+1, string.uppercase[i]) for j in range(self.colunas) ]
             for i in range(self.linhas)
         ]
 

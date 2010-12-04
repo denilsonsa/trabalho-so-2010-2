@@ -16,8 +16,11 @@ public class ListenerThread {
 			ServerSocket server_socket = null;
 
 			int porta = 1234;
+			if( args.length == 1 )
+				porta = Integer.parseInt(args[0]);
+
 			server_socket = new ServerSocket(porta);
-			System.out.println("Escutando porta " + Integer.toString(porta));
+			System.out.println("dbserver escutando na porta " + Integer.toString(porta));
 
 			while(true) {
 				Socket incoming = server_socket.accept();

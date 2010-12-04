@@ -110,6 +110,12 @@ h1 {
 	color: black;
 }
 
+/* index */
+div.index p {
+	margin-left: 8px;
+	margin-right: 8px;
+}
+
 /* "Listar sessões" table */
 table.sessoes {
     border-collapse: collapse;
@@ -239,4 +245,48 @@ div.ingresso .barcode {
 	/*width: 145px;*/
 	width: 290px;
 	margin: 1em auto;
+}
+
+/* Cadastrar sessao */
+div.cadastrar_sessao table {
+	border-collapse: collapse;
+	border: 0;
+	table-layout: fixed;
+	width: 400px;
+	margin: 1em auto;
+}
+div.cadastrar_sessao table th {
+	border: 0;
+	font: inherit;
+	font-weight: bold;
+	text-align: right;
+	vertical-align: top;
+	width: 100px;
+}
+div.cadastrar_sessao table td {
+	border: 0;
+	width: 300px;
+	text-align: left;
+	vertical-align: top;
+}
+div.cadastrar_sessao table td input[type=text] {
+	width: 100%;
+}
+div.cadastrar_sessao table td textarea {
+	width: 100%;
+}
+div.cadastrar_sessao table td strong.wrong {
+	display: block;
+	margin-bottom: 1ex;
+	font: inherit;
+	color: red;
+}
+div.cadastrar_sessao table tr:last-child td {
+	padding-top: 1em;
+	text-align: right;
+}
+div.cadastrar_sessao table td button,
+div.cadastrar_sessao table td input[type=submit] {
+	background: #12AB40;
+	color: white;
 }

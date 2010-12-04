@@ -3,6 +3,7 @@
 
 from itertools import takewhile
 import socket
+import cPickle as pickle
 
 
 PERSISTENCE_SERVER_ADDRESS = ("127.0.0.1", 1234)
@@ -14,6 +15,11 @@ class Connection(object):
         self.sock.connect(PERSISTENCE_SERVER_ADDRESS)
         self.file_like = self.sock.makefile("rb")
 
+    def close(self):
+        "Fecha a conexão"
+        self.file_like.close()
+        self.sock.close()
+
     def acquire(self):
         "Inicia uma transação, adquirindo um semáforo global."
         self.sock.sendall("ACQUIRE\n")
@@ -23,6 +29,7 @@ class Connection(object):
         self.sock.sendall("RELEASE\n")
 
     def get(self, name):
+        "Retorna a string que foi salva no dbserver."
         # Esta função remove "trailing newlines" da string retornada.
         self.sock.sendall("GET {0}\n".format(name))
         return "".join(
@@ -32,11 +39,17 @@ class Connection(object):
             )
         ).rstrip("\n")
 
+    def load(self, name):
+        "Retorna o objeto salvo no dbserver (usando pickle)."
+        return pickle.loads(self.get(name))
+
     def put(self, name, data):
+        "Salva uma string no dbserver."
         self.sock.sendall("PUT {0}\n".format(name))
         self.sock.sendall(data)
         self.sock.sendall("\n###\n")
 
-    def close(self):
-        self.file_like.close()
-        self.sock.close()
+    def save(self, name, obj):
+        "Salva um objeto no dbserver (usando pickle)."
+        self.put(name, pickle.dumps(obj))
+

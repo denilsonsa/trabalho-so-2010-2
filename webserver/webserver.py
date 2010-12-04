@@ -9,9 +9,11 @@ from models import Sessao, AssentosDaSessao, Assento
 
 urls = (
     r'/', 'homepage',
-    r'/sessoes', 'sessoes',
-    r'/sessao/(\d+)', 'sessao',
-    r'/comprar/(\d+)/(\d+),(\d+)', 'comprar_assento',
+    r'/admin', 'admin',
+    r'/sessoes/?', 'sessoes',
+    r'/cadastrar_sessao/?', 'cadastrar_sessao',
+    r'/sessao/(\d+)/?', 'sessao',
+    r'/comprar/(\d+)/([a-zA-Z0-9]+),([a-zA-Z0-9]+)/?', 'comprar_assento',
     r'/comet', 'comet',
 )
 # "/static/" directory is automatically served by web.py
@@ -24,10 +26,52 @@ class homepage:
         return render.index()
         #return u'Hello, Thomé!'
 
+class admin:
+    def GET(self):
+        return render.admin()
+
 
 class sessoes:
     def GET(self):
         return render.listar_sessoes(sorted(Sessao(randomize=True) for i in range(10)))
+
+
+class cadastrar_sessao:
+    form = web.form.Form(
+        web.form.Textbox(
+            'filme',
+            web.form.notnull,
+            description="Filme:"
+        ),
+        web.form.Textbox(
+            'sala',
+            web.form.notnull,
+            description="Sala:"
+        ),
+        web.form.Textbox(
+            'hora',
+            web.form.notnull,
+            description="Hora:"
+        ),
+        web.form.Textarea(
+            'sinopse',
+            description="Sinopse:"
+        ),
+        web.form.Button(u'Cadastrar'),
+    )
+
+    def GET(self):
+        s = Sessao()
+        f = self.form()
+        return render.cadastrar_sessao(s, f)
+
+    def POST(self):
+        s = Sessao()
+        f = self.form()
+        if f.validates():
+            return "Good!"
+        else:
+            return render.cadastrar_sessao(s, f)
 
 
 class sessao:

@@ -8,16 +8,9 @@ $def with (sessao, assentos)
 <div class="hora">$sessao.hora</div>
 
 <div class="sinopse">
-<!--lorem-->
-<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, faucibus orci
-luctus et ultrices posuere cubilia Curae; Curabitur consequat leo et dui.
-Aenean ligula mi, dignissim ut, imperdiet tristique, interdum a, dolor.</p>
-
-<p>Vestibulum elit nibh, rhoncus non, euismod sit amet, pretium eu, enim. Nunc
-commodo ultricies dui. Cras gravida rutrum massa. Donec accumsan mattis turpis.
-Quisque sem. Quisque elementum sapien iaculis augue. In dui sem, congue sit
-amet, feugiat quis, lobortis at, eros.</p>
-<!--/lorem-->
+$for linha in sessao.sinopse.splitlines():
+	$if linha:
+		<p>$linha</p>
 </div>
 
 <table class="mapa_de_assentos">
