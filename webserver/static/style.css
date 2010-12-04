@@ -12,6 +12,11 @@ a img {
 	border: 0;
 }
 
+form {
+	margin: 0;
+	padding: 0;
+}
+
 /* Color list:
 
 #1240AB - Main
@@ -189,5 +194,49 @@ table.mapa_de_assentos td > a {
 }
 
 /* Comprar ingresso */
-div.comprar_assento {
+div.ingresso {
+	width: 500px;
+	border: 2px dashed black;
+	padding: 0 1em;
+	margin: 1em auto;
+
+	font-family: "Courier New", "Courier", monospace;
+}
+div.ingresso .filme {
+	text-align: center;
+	font-weight: bold;
+	margin: 1em 0;
+}
+div.ingresso .sala {
+	float: left;
+}
+div.ingresso .hora {
+	float: right;
+	text-align: right;
+}
+div.ingresso .cadeira {
+	text-align: center;
+}
+
+div.ingresso form {
+	margin: 1em;
+	text-align: center;
+}
+div.ingresso form input {
+	background: #12AB40;
+	color: white;
+	font-size: 1.5em;
+	padding: 0.5em 1em;
+	margin: 0 auto;
+}
+div.ingresso .mensagem {
+	color: red;
+	margin: 1em 0;
+	text-align: center;
+}
+div.ingresso .barcode {
+	/* 145px is the minimum for a 20-digit barcode*/
+	/*width: 145px;*/
+	width: 290px;
+	margin: 1em auto;
 }

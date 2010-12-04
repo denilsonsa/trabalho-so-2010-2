@@ -1,0 +1,37 @@
+.barcode {
+	padding: 0 10px; /* quiet zone */
+	height: 0.5in;   /* size */
+}
+
+.barcode .bars > div {
+	float: left;
+	height: 0.35in;  /* size */
+}
+.barcode .bars .bar1 { border-left: 1px solid black; }
+.barcode .bars .bar2 { border-left: 2px solid black; }
+.barcode .bars .bar3 { border-left: 3px solid black; }
+.barcode .bars .bar4 { border-left: 4px solid black; }
+.barcode .bars .space0 { margin-right: 0px; }
+.barcode .bars .space1 { margin-right: 1px; }
+.barcode .bars .space2 { margin-right: 2px; }
+.barcode .bars .space3 { margin-right: 3px; }
+.barcode .bars .space4 { margin-right: 4px; }
+
+.barcode.doublesize { padding: 0 20px; /* quiet zone */ }
+.barcode.doublesize .bars .bar1 { border-left: 2px solid black; }
+.barcode.doublesize .bars .bar2 { border-left: 4px solid black; }
+.barcode.doublesize .bars .bar3 { border-left: 6px solid black; }
+.barcode.doublesize .bars .bar4 { border-left: 8px solid black; }
+.barcode.doublesize .bars .space0 { margin-right: 0px; }
+.barcode.doublesize .bars .space1 { margin-right: 2px; }
+.barcode.doublesize .bars .space2 { margin-right: 4px; }
+.barcode.doublesize .bars .space3 { margin-right: 6px; }
+.barcode.doublesize .bars .space4 { margin-right: 8px; }
+
+.barcode .label {
+	float: none;
+	clear: both;
+    display: block;
+    text-align: center;
+    /* font: 0.125in/100% "Helvetica", monospace; */
+}

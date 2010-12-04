@@ -1,15 +1,27 @@
-$def with (sessao, assento)
-
-<div class="comprar_assento">
+$def with (sessao, assento, cod_compra)
 
 <h1>Comprar ingresso</h1>
+
+<div class="ingresso">
 
 <div class="filme">$sessao.filme</div>
 <div class="sala">Sala $sessao.sala</div>
 <div class="hora">$sessao.hora</div>
+<div class="cadeira">Cadeira ${assento.y}${assento.x}</div>
 
-<form method="POST" action="">
-<input type="submit" value="Confirmar compra" />
-</form>
+$if cod_compra:
+	<div class="barcode doublesize">
+	<script type="text/javascript">
+	document.write(code128("$cod_compra"));
+	</script>
+	</div>
+
+$else:
+	$if assento.estado == assento.LIVRE:
+		<form method="POST" action="">
+		<input type="submit" value="Confirmar compra »" />
+		</form>
+	$else:
+		<div class="mensagem">Desculpe, este assento não está mais disponível.</div>
 
 </div>

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # vi:ts=4 sw=4 et
 
+import random
 import web
 from models import Sessao, AssentosDaSessao, Assento
 
@@ -42,10 +43,15 @@ class comprar_assento:
         s = Sessao(randomize=True)
         s.id = id
         a = Assento(assento_x, assento_y)
-        return render.comprar_assento(s, a)
+        return render.comprar_assento(s, a, None)
 
     def POST(self, sessao_id, assento_x, assento_y):
-        raise web.seeother('/sessao/'+str(sessao_id))
+        s = Sessao(randomize=True)
+        s.id = id
+        a = Assento(assento_x, assento_y)
+        cod_compra = u"".join(str(random.randint(0,9)) for i in range(20))
+        return render.comprar_assento(s, a, cod_compra)
+        #raise web.seeother('/sessao/'+str(sessao_id))
 
 
 class comet:

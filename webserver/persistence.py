@@ -23,7 +23,7 @@ class Connection(object):
         self.sock.sendall("RELEASE\n")
 
     def get(self, name):
-        # XXX: Esta função remove "trailing newlines" da string retornada.
+        # Esta função remove "trailing newlines" da string retornada.
         self.sock.sendall("GET {0}\n".format(name))
         return "".join(
             takewhile(
