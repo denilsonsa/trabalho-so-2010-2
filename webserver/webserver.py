@@ -3,6 +3,7 @@
 # vi:ts=4 sw=4 et
 
 import random
+import re
 import web
 from itertools import chain
 
@@ -17,6 +18,7 @@ urls = (
     r'/listar_salas/?', 'listar_salas',
     r'/cadastrar_sala/?', 'cadastrar_sala',
     r'/cadastrar_sessao/?', 'cadastrar_sessao',
+    r'/maintenance', 'maintenance',
 
     r'/sessoes/?', 'listar_sessoes',
     r'/sessao/(\d+)/?', 'sessao',
@@ -37,6 +39,53 @@ class homepage:
 class admin:
     def GET(self):
         return render.admin()
+
+
+class maintenance:
+    get_form = web.form.Form(  # {{{
+        web.form.Textbox(
+            'query_get',
+            web.form.notnull,
+            web.form.regexp('^[a-zA-Z0-9_]+$', 'Nome inválido'),
+            description="Parâmetro do GET"
+        ),
+        web.form.Button(
+            'GET',
+            type='submit'
+        )
+    )  # }}}
+
+    def GET(self):
+        return render.maintenance(None, self.get_form())
+
+    def POST(self):
+        input = web.input()
+        if input.has_key('flush'):
+            c = Connection()
+            c.acquire()
+            c.put("salas", "")
+            c.put("sessoes", "")
+            c.release()
+            c.close()
+            return render.maintenance(u'O banco de dados foi apagado.', self.get_form())
+        elif input.has_key('init'):
+            c = Connection()
+            c.acquire()
+            #c.put("salas", "")
+            #c.put("sessoes", "")
+            c.release()
+            c.close()
+            return render.maintenance(u'O banco de dados foi inicializado. (Mentira! Esta função ainda não foi implementada!)', self.get_form())
+        elif input.has_key('query_get'):
+            form = self.get_form()
+            if form.validates():
+                c = Connection()
+                name = form['query_get'].value
+                result = c.get(name)
+                c.close()
+                return render.maintenance(u'GET {0}\n{1}'.format(name, result), form)
+            else:
+                return render.maintenance(u'Nome inválido passado para a query GET.', form)
 
 
 class listar_salas:
