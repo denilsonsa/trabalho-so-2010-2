@@ -1,0 +1,30 @@
+$def with (message, get_form)
+
+<h1>Ferramentas de Manutenção e Debug</h1>
+
+<div class="maintenance">
+
+$if message:
+	<div class="mensagem"><pre>$message</pre></div>
+
+<form action="" method="POST">
+<table>
+
+<tr>
+<td class="botao"><input type="submit" name="flush" value="Limpar banco de dados" /></td>
+<td class="descricao">Apaga o conteúdo do banco de dados.</td>
+</tr>
+
+<!--tr>
+<td class="botao"><input type="submit" name="init" class="dangerous" value="Inicializar banco de dados" /></td>
+<td class="descricao">Apaga o banco de dados, e depois insere dados suficientes para demonstração e testes.</td>
+</tr-->
+
+</table>
+</form>
+
+<form action="" method="POST">
+$:get_form.render()
+</form>
+
+</div>

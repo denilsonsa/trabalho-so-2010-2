@@ -42,21 +42,31 @@ class admin:
 
 
 class maintenance:
-    get_form = web.form.Form(  # {{{
+    query_form = web.form.Form(  # {{{
         web.form.Textbox(
-            'query_get',
+            'query_name',
             web.form.notnull,
             web.form.regexp('^[a-zA-Z0-9_]+$', 'Nome inválido'),
-            description="Parâmetro do GET"
+            description="Nome"
+        ),
+        web.form.Textarea(
+            'query_value',
+            description="Valor (apenas para PUT)"
+        ),
+        web.form.Radio(
+            'query_action',
+            'GET LOAD PUT'.split(),
+            web.form.notnull,
+            description="Ação"
         ),
         web.form.Button(
-            'GET',
+            'Enviar query para dbserver',
             type='submit'
         )
     )  # }}}
 
     def GET(self):
-        return render.maintenance(None, self.get_form())
+        return render.maintenance(None, self.query_form())
 
     def POST(self):
         input = web.input()
@@ -67,7 +77,7 @@ class maintenance:
             c.put("sessoes", "")
             c.release()
             c.close()
-            return render.maintenance(u'O banco de dados foi apagado.', self.get_form())
+            return render.maintenance(u'O banco de dados foi apagado.', self.query_form())
         elif input.has_key('init'):
             c = Connection()
             c.acquire()
@@ -75,17 +85,29 @@ class maintenance:
             #c.put("sessoes", "")
             c.release()
             c.close()
-            return render.maintenance(u'O banco de dados foi inicializado. (Mentira! Esta função ainda não foi implementada!)', self.get_form())
-        elif input.has_key('query_get'):
-            form = self.get_form()
+            return render.maintenance(u'O banco de dados foi inicializado. (Mentira! Esta função ainda não foi implementada!)', self.query_form())
+        elif input.has_key('query_action'):
+            form = self.query_form()
             if form.validates():
                 c = Connection()
-                name = form['query_get'].value
-                result = c.get(name)
+                action = form['query_action'].value
+                name = form['query_name'].value
+                if action == 'GET':
+                    result = c.get(name)
+                elif action == 'LOAD':
+                    result = repr(c.load(name))
+                elif action == 'PUT':
+                    value = form['query_value'].value
+                    c.put(name, value)
+                    result = ''
+                else:
+                    result = u'Isto não deveria acontecer'
                 c.close()
-                return render.maintenance(u'GET {0}\n{1}'.format(name, result), form)
+                return render.maintenance(u'{0} {1}\n{2}'.format(action, name, result), form)
             else:
-                return render.maintenance(u'Nome inválido passado para a query GET.', form)
+                return render.maintenance(u'Entrada inválida', form)
+        else:
+            return render.maintenance(None, self.query_form())
 
 
 class listar_salas:
