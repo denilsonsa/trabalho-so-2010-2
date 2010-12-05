@@ -23,8 +23,6 @@ urls = (
     r'/sessoes/?', 'listar_sessoes',
     r'/sessao/(\d+)/?', 'sessao',
     r'/comprar/(\d+)/([-_a-zA-Z0-9]+)/?', 'comprar_assento',
-
-    r'/comet', 'comet', # this is just a small experiment
 )
 # "/static/" directory is automatically served by web.py
 
@@ -335,19 +333,6 @@ class comprar_assento:
         cod_compra = u"".join(str(random.randint(0,9)) for i in range(20))
 
         return render.comprar_assento(sessao, assento, cod_compra)
-
-
-class comet:
-    def GET(self):
-        # Based on:
-        # http://yoan.dosimple.ch/blog/2007/11/30/
-        # http://groups.google.com/group/webpy/browse_thread/thread/a12348390931b426
-        # http://en.wikipedia.org/wiki/Comet_(programming)
-        yield "This is a padding text...\n" * 60
-        import time
-        for i in range(100):
-            time.sleep(1)
-            yield "%d\n" % (i,)
 
 
 # Debugging is automatically enabled in the built-in webserver
