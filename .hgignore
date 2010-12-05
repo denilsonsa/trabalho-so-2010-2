@@ -15,4 +15,3 @@ syntax: glob
 .swo
 *.pyc
 *.pyo
-*.class
