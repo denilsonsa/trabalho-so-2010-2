@@ -18,9 +18,9 @@ $for linha in sessao.assentos:
 	<tr>
 	$for coluna in linha:
 		$if coluna.estado == coluna.LIVRE:
-			<td class="assento_estado_${coluna.estado}"><a href="/comprar/$sessao.id/$coluna.id"></a></td>
+			<td class="assento_estado_${coluna.estado}"><a href="/comprar/$sessao.id/$coluna.id">$coluna.id</a></td>
 		$elif coluna.estado == coluna.OCUPADO:
-			<td class="assento_estado_${coluna.estado}"></td>
+			<td class="assento_estado_${coluna.estado}">$coluna.id</td>
 	</tr>
 </table>
 
