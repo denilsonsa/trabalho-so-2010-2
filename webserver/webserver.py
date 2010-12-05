@@ -14,6 +14,8 @@ from models import Sala, Sessao, Assento
 urls = (
     r'/', 'homepage',
 
+    r'/apresentacao', 'apresentacao',
+
     r'/admin', 'admin',
     r'/listar_salas/?', 'listar_salas',
     r'/cadastrar_sala/?', 'cadastrar_sala',
@@ -32,7 +34,11 @@ render = web.template.render('templates/', base='base')
 class homepage:
     def GET(self):
         return render.index()
-        #return u'Hello, Thomé!'
+        #return u'Hello, World!'
+
+class apresentacao:
+    def GET(self):
+        return render.apresentacao()
 
 class admin:
     def GET(self):

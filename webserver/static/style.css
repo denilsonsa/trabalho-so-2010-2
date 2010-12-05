@@ -131,6 +131,14 @@ div.index p {
 	margin-right: 8px;
 }
 
+/* apresentacao */
+div.apresentacao div.flashobject {
+	text-align: center;
+}
+div.apresentacao object {
+	vertical-align: bottom;
+}
+
 /* list_data table (Listar Salas, Listar Sessões) */
 table.list_data {
     border-collapse: collapse;
