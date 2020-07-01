@@ -1,6 +1,6 @@
 CINEMAX_2010
 
-Trabalho de Sistemas Operacionais 2010/2
+Terceiro trabalho de Sistemas Operacionais 2010/2
 DCC/UFRJ, professor Antonio Carlos Gay Thomé
 
 Autores:
